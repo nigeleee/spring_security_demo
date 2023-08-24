@@ -39,7 +39,7 @@ public class RegistrationController {
         String result = userService.validateVerificaionToken(token);
         if(result.equalsIgnoreCase("valid")) {
             return "User Verified Successfully";
-        }
+        } 
 
         return "Bad User";
     }
@@ -47,36 +47,5 @@ public class RegistrationController {
     private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
-    // @PostMapping("/register")
-    // public ResponseEntity<String> registerUser(@RequestBody UserRegistrationRequest registrationRequest) {
-    //     User newUser = new User();
-    //     newUser.setUsername(registrationRequest.getUsername());
-    //     newUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-    //     newUser.setEmail(registrationRequest.getEmail());
-    //     // Set roles and other properties if needed
-    //     userRepo.save(newUser);
-
-    
-
-    //     return ResponseEntity.ok("User registered successfully");
-    // }
-
-    // @PostMapping("/login")
-    // public ResponseEntity<String> loginUser(@RequestBody UserLoginRequest loginRequest) {
-    //     try {
-    //         Authentication authentication = authenticationManager.authenticate(
-    //                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-    //         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
-
-    //         // Create JWT token if needed and return it in the response
-
-    //         return ResponseEntity.ok("Login successful");
-    //     } catch (UsernameNotFoundException ex) {
-    //         return ResponseEntity.badRequest().body("User not found");
-    //     } catch (Exception ex) {
-    //         return ResponseEntity.status(401).body("Invalid credentials");
-    //     }
-    // }
 
 }

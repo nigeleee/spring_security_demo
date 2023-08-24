@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart Test</title>
+</head>
+<body>
+    <h1>Add Product to Cart</h1>
+    <form action="/api/add" method="post">
+        <label for="productId">Product ID:</label>
+        <input type="text" id="productId" name="productId"><br><br>
+
+        <label for="quantity">Quantity:</label>
+        <input type="text" id="quantity" name="quantity"><br><br>
+
+        <input type="submit" value="Add to Cart">
+    </form>
+
+    <h1>Cart Items</h1>
+    <button onclick="getAllCartItems()">Get Cart Items</button>
+    <ul id="cartItemList"></ul>
+
+    <script>
+        function getAllCartItems() {
+            fetch("/api/cart")
+                .then(response => response.json())
+                .then(data => {
+                    const cartItemList = document.getElementById("cartItemList");
+                    cartItemList.innerHTML = "";
+
+                    data.forEach(item => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `Product: ${item.name}, Quantity: ${item.quantity}, Total Price: ${item.totalPrice}`;
+                        cartItemList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error("Error fetching cart items:", error));
+        }
+    </script>
+   <form id="checkoutForm" action="/api/checkout" method="post" th:object="${orderDetails}">
+    <label for="customerName">Name:</label>
+    <input type="text" id="customerName" name="customerName"><br>
+
+    <label for="customerEmail">Email:</label>
+    <input type="email" id="customerEmail" name="customerEmail"><br>
+
+    <label for="customerPhone">Phone:</label>
+    <input type="text" id="customerPhone" name="customerPhone"><br>
+
+    <label for="customerAddress">Address:</label>
+    <textarea id="customerAddress" name="customerAddress"></textarea><br>
+
+    <!-- Include hidden inputs for productId and quantity -->
+    
+        <!-- Include hidden inputs for productId and quantity using Thymeleaf expressions -->
+        <input type="hidden" name="productId" th:field="${productId}">
+        <input type="hidden" name="quantity" th:field="${quantity}">
+    
+        <input type="submit" value="Complete Checkout">
+    </form>
+</body>
+</html>
