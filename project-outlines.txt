@@ -1,0 +1,14 @@
+purpose is to create a ecommerce website
+customers can add products to cart as a generic user and a user that can sign up and log in
+
+key points to work on
+- integrate user log in and save user credentials to database, persist data, like cart items in sql
+- oauth2
+- reset password
+- resend verification token
+
+
+completed
+- user registration, validation token and email
+- adding to cart, displaying cart items, and checking out with confirmation email and receipt sent to user
+- http sessions for guest user to add to cart. cart items wont be persisted on sql
