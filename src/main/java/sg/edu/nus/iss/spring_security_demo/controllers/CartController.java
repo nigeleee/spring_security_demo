@@ -98,8 +98,11 @@ public class CartController {
 
 
     @PostMapping("/checkout")
-    public ResponseEntity<String> completeCheckout(@RequestParam Long productId, @RequestParam int quantity,
-            @ModelAttribute OrderDetails orderDetails) {
+    public ResponseEntity<String> completeCheckout(
+        @RequestParam Long productId, 
+        @RequestParam int quantity,
+        @ModelAttribute OrderDetails orderDetails) {
+            
         cartItemService.checkoutAndCreateOrder(productId, quantity, orderDetails);
 
         session.removeAttribute("cartItems");
