@@ -12,6 +12,8 @@ public class CartItemSummary {
     private String name;
     private double totalPrice;
     private int quantity;
+    private Long userId;
+    private Long orderId;
 
     public void setProductName(String name) {
         this.name = name;
@@ -23,4 +25,5 @@ public class CartItemSummary {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
 }

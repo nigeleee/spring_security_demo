@@ -21,6 +21,11 @@ public class CartItem {
     @Column(name = "cart_id")
     private Long cartId;
     // private Long productId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
@@ -32,10 +37,6 @@ public class CartItem {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
     
 }

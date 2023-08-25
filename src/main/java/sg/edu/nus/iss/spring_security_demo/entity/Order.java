@@ -1,8 +1,6 @@
 package sg.edu.nus.iss.spring_security_demo.entity;
 
 import java.util.List;
-import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Cart Test</title>
@@ -49,13 +49,24 @@
     <label for="customerAddress">Address:</label>
     <textarea id="customerAddress" name="customerAddress"></textarea><br>
 
-    <!-- Include hidden inputs for productId and quantity -->
-    
-        <!-- Include hidden inputs for productId and quantity using Thymeleaf expressions -->
+
         <input type="hidden" name="productId" th:field="${productId}">
         <input type="hidden" name="quantity" th:field="${quantity}">
     
         <input type="submit" value="Complete Checkout">
     </form>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form action="/login" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </body>
-</html>
+</html> -->
+

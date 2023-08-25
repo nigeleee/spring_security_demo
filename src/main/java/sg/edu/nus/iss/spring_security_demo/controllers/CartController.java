@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sg.edu.nus.iss.spring_security_demo.entity.Product;
+import sg.edu.nus.iss.spring_security_demo.entity.User;
 import sg.edu.nus.iss.spring_security_demo.model.CartItemSummary;
 import sg.edu.nus.iss.spring_security_demo.model.OrderDetails;
 import sg.edu.nus.iss.spring_security_demo.service.CartItemService;
 import sg.edu.nus.iss.spring_security_demo.service.ProductService;
+import sg.edu.nus.iss.spring_security_demo.service.UserService;
 
 @RestController
 @RequestMapping("/api")
@@ -34,54 +36,82 @@ public class CartController {
     private ProductService productService;
     @Autowired
     private HttpSession session;
+    @Autowired
+    private UserService userService;
 
-    
-        @PostMapping("/add")
-        public ResponseEntity<String> addProductToCart(@RequestParam Long productId, @RequestParam int quantity, HttpSession session) {
-        // Retrieve the map of product IDs to quantities from the session
+    // For authenticated users
+    @PostMapping("/user/add")
+    public ResponseEntity<String> addUserProductToCart(@RequestParam Long productId, @RequestParam int quantity) {
+        User user = userService.getCurrentUser();
+        if (user != null) {
+            cartItemService.addToUserCart(productId, user, quantity);
+            return ResponseEntity.ok("Product added to user's cart");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+        }
+    }
+
+    // For guests
+    @PostMapping("/guest/add")
+    public ResponseEntity<String> addGuestProductToCart(@RequestParam Long productId, @RequestParam int quantity,
+            HttpSession session) {
         Map<Long, Integer> cartItems = (Map<Long, Integer>) session.getAttribute("cartItems");
-
         if (cartItems == null) {
             cartItems = new HashMap<>();
         }
-
-        // Add the product ID and quantity to the map
         cartItems.put(productId, quantity);
-
-        // Update the map in the session
         session.setAttribute("cartItems", cartItems);
-
-        return ResponseEntity.ok("Product added to cart");
+        return ResponseEntity.ok("Product added to guest's cart");
     }
-    
+
+    // @PostMapping("/add-test")
+    // public ResponseEntity<String> testAdd(@RequestParam Long productId,
+    // @RequestParam int quantity) {
+
+    // cartItemService.testingAdd(productId, quantity);
+
+    // return ResponseEntity.ok("product added");
+
+    // }
 
     @GetMapping("/cart")
     public ResponseEntity<List<CartItemSummary>> getAllCartItems(HttpSession session) {
-    Map<Long, Integer> cartItems = (Map<Long, Integer>) session.getAttribute("cartItems");
 
-    if (cartItems == null || cartItems.isEmpty()) {
-        return ResponseEntity.ok(new ArrayList<>()); // Return an empty list
-    }
+        User user = userService.getCurrentUser();
 
-    List<CartItemSummary> cartItemSummaries = new ArrayList<>();
-    for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
-        Long productId = entry.getKey();
-        int quantity = entry.getValue();
+        if (user != null) {
+            // User is logged in, get user's cart from the database
+            List<CartItemSummary> cartItems = cartItemService.getCartItemsForUser(user.getUserId());
+            return ResponseEntity.ok(cartItems);
+        } else {
 
-        // Fetch the product from the database by productId
-        Product product = productService.getProductById(productId);
+            Map<Long, Integer> cartItems = (Map<Long, Integer>) session.getAttribute("cartItems");
 
-        if (product != null) {
-            CartItemSummary summary = new CartItemSummary();
-            summary.setName(product.getName());
-            summary.setTotalPrice(product.getPrice() * quantity);
-            summary.setQuantity(quantity);
-            cartItemSummaries.add(summary);
+            if (cartItems == null || cartItems.isEmpty()) {
+                return ResponseEntity.ok(new ArrayList<>()); // Return an empty list
+            }
+
+            List<CartItemSummary> cartItemSummaries = new ArrayList<>();
+            for (Map.Entry<Long, Integer> entry : cartItems.entrySet()) {
+                Long productId = entry.getKey();
+                int quantity = entry.getValue();
+
+                // Fetch the product from the database by productId
+                Product product = productService.getProductById(productId);
+
+                if (product != null) {
+                    CartItemSummary summary = new CartItemSummary();
+                    summary.setName(product.getName());
+                    summary.setTotalPrice(product.getPrice() * quantity);
+                    summary.setQuantity(quantity);
+                    cartItemSummaries.add(summary);
+                }
+            }
+
+            return ResponseEntity.ok(cartItemSummaries);
         }
-    }
 
-    return ResponseEntity.ok(cartItemSummaries);
-}
+    }
 
     @DeleteMapping("/delete/{cartItemId}")
     public ResponseEntity<String> removeCartItem(@PathVariable Long cartItemId, HttpSession session) {
@@ -89,20 +119,18 @@ public class CartController {
         return ResponseEntity.ok("Cart item removed");
     }
 
-
     @PostMapping("/clear-cart")
     public ResponseEntity<String> clearCart(HttpSession session) {
         session.removeAttribute("cartItems");
         return ResponseEntity.ok("Cart cleared");
     }
 
-
     @PostMapping("/checkout")
     public ResponseEntity<String> completeCheckout(
-        @RequestParam Long productId, 
-        @RequestParam int quantity,
-        @ModelAttribute OrderDetails orderDetails) {
-            
+            @RequestParam Long productId,
+            @RequestParam int quantity,
+            @ModelAttribute OrderDetails orderDetails) {
+
         cartItemService.checkoutAndCreateOrder(productId, quantity, orderDetails);
 
         session.removeAttribute("cartItems");
@@ -112,87 +140,129 @@ public class CartController {
 
 }
 
+/*
+ * @PostMapping("/add")
+ * public ResponseEntity<String> addProductToCart(@RequestParam Long
+ * productId, @RequestParam int quantity,
+ * HttpSession session) {
+ * 
+ * Product product = productService.getProductById(productId);
+ */
 
+// if (product != null) {
+// cartItemService.addToCart(productId, quantity);
+// return ResponseEntity.ok("Product added to cart");
+// } else {
+// return ResponseEntity.badRequest().body("Product not found");
+// }
 
+// if (product != null) {
+// // Retrieve the current cart items from the session
+// List<CartItem> cartItems = (List<CartItem>)
+// session.getAttribute("cartItems");
+// if (cartItems == null) {
+// cartItems = new ArrayList<>();
+// }
 
-/*@PostMapping("/add")
-    public ResponseEntity<String> addProductToCart(@RequestParam Long productId, @RequestParam int quantity,
-            HttpSession session) {
+// // Add the new cart item
+// CartItem cartItem = new CartItem();
+// cartItem.setProduct(product);
+// cartItem.setQuantity(quantity);
+// cartItems.add(cartItem);
 
-        Product product = productService.getProductById(productId); */
+// // Store the updated cart items back to the session
+// session.setAttribute("cartItems", cartItems);
 
-        // if (product != null) {
-        // cartItemService.addToCart(productId, quantity);
-        // return ResponseEntity.ok("Product added to cart");
-        // } else {
-        // return ResponseEntity.badRequest().body("Product not found");
-        // }
+// return ResponseEntity.ok("Product added to cart");
+// } else {
+// return ResponseEntity.badRequest().body("Product not found");
+// }
 
-        // if (product != null) {
-        //     // Retrieve the current cart items from the session
-        //     List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cartItems");
-        //     if (cartItems == null) {
-        //         cartItems = new ArrayList<>();
-        //     }
+// @GetMapping("/cart")
+// public ResponseEntity<List<CartItemSummary>> getAllCartItems() {
+// try {
+// List<CartItem> cartItems = cartItemService.getAllCartItems();
+// List<CartItemSummary> cartItemSummaries = new ArrayList<>();
 
-        //     // Add the new cart item
-        //     CartItem cartItem = new CartItem();
-        //     cartItem.setProduct(product);
-        //     cartItem.setQuantity(quantity);
-        //     cartItems.add(cartItem);
+// for (CartItem cartItem : cartItems) {
+// CartItemSummary summary = new CartItemSummary();
+// summary.setName(cartItem.getProduct().getName());
+// summary.setTotalPrice(cartItem.getProduct().getPrice() *
+// cartItem.getQuantity());
+// summary.setQuantity(cartItem.getQuantity());
+// cartItemSummaries.add(summary);
+// }
 
-        //     // Store the updated cart items back to the session
-        //     session.setAttribute("cartItems", cartItems);
+// return ResponseEntity.ok(cartItemSummaries);
 
-        //     return ResponseEntity.ok("Product added to cart");
-        // } else {
-        //     return ResponseEntity.badRequest().body("Product not found");
-        // }
+// } catch (Exception e) {
+// return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+// }
 
-        // @GetMapping("/cart")
-    // public ResponseEntity<List<CartItemSummary>> getAllCartItems() {
-    //     try {
-    //         List<CartItem> cartItems = cartItemService.getAllCartItems();
-    //         List<CartItemSummary> cartItemSummaries = new ArrayList<>();
+// }
 
-    //         for (CartItem cartItem : cartItems) {
-    //             CartItemSummary summary = new CartItemSummary();
-    //             summary.setName(cartItem.getProduct().getName());
-    //             summary.setTotalPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
-    //             summary.setQuantity(cartItem.getQuantity());
-    //             cartItemSummaries.add(summary);
-    //         }
+// @DeleteMapping("/delete/{cartItemId}")
+// public ResponseEntity<String> removeCartItem(@PathVariable Long cartItemId,
+// HttpSession session) {
+// // Get the cart items from the session
+// List<CartItem> cartItems = (List<CartItem>)
+// session.getAttribute("cartItems");
 
-    //         return ResponseEntity.ok(cartItemSummaries);
+// if (cartItems != null) {
+// // Find and remove the cart item from the list
+// CartItem cartItemToRemove = null;
+// for (CartItem cartItem : cartItems) {
+// if (cartItem.getCartId().equals(cartItemId)) {
+// cartItemToRemove = cartItem;
+// break;
+// }
+// }
 
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    //     }
+// if (cartItemToRemove != null) {
+// cartItems.remove(cartItemToRemove);
+// // Update the session with the modified list
+// session.setAttribute("cartItems", cartItems);
+// return ResponseEntity.ok("Cart item removed");
+// }
+// }
 
-    // }
+// return ResponseEntity.badRequest().body("Cart item not found");
+// }
 
-    //     @DeleteMapping("/delete/{cartItemId}")
-//     public ResponseEntity<String> removeCartItem(@PathVariable Long cartItemId, HttpSession session) {
-//     // Get the cart items from the session
-//     List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cartItems");
+// @PostMapping("/add")
+// public ResponseEntity<String> addProductToCart(@RequestParam Long productId,
+// @RequestParam int quantity, HttpSession session) {
 
-//     if (cartItems != null) {
-//         // Find and remove the cart item from the list
-//         CartItem cartItemToRemove = null;
-//         for (CartItem cartItem : cartItems) {
-//             if (cartItem.getCartId().equals(cartItemId)) {
-//                 cartItemToRemove = cartItem;
-//                 break; 
-//             }
-//         }
+// System.out.println(">>>>>>>>>>>>>>>>>>>>>> in getCurrentUser method");
+// User user = userService.getCurrentUser();
 
-//         if (cartItemToRemove != null) {
-//             cartItems.remove(cartItemToRemove);
-//             // Update the session with the modified list
-//             session.setAttribute("cartItems", cartItems);
-//             return ResponseEntity.ok("Cart item removed");
-//         }
-//     }
+// System.out.printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Get current user %s%n",
+// user);
 
-//     return ResponseEntity.badRequest().body("Cart item not found");
+// if (user != null) {
+// // User is logged in, add to user's cart in the database
+// cartItemService.addToUserCart( productId, user, quantity);
+// System.out.printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Details of
+// product id, user and quantity added: productId=%s, user=%s, quantity=%s%n",
+// productId, user, quantity);
+// return ResponseEntity.ok("Product added to user's cart");
+
+// } else {
+
+// // Retrieve the map of product IDs to quantities from the session
+// Map<Long, Integer> cartItems = (Map<Long, Integer>)
+// session.getAttribute("cartItems");
+
+// if (cartItems == null) {
+// cartItems = new HashMap<>();
+// }
+
+// // Add the product ID and quantity to the map
+// cartItems.put(productId, quantity);
+
+// // Update the map in the session
+// session.setAttribute("cartItems", cartItems);
+
+// return ResponseEntity.ok("Product added to cart");
+// }
 // }

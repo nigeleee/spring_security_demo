@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Data 
-
 @Entity
 @Table(name="product")
 public class Product {
@@ -24,11 +23,5 @@ public class Product {
     private Double price;
     private Integer quantity;
     private String size;
-
-    public void setProduct(Product product) {
-    }
-    
-    public void setUser(User user) {
-    }
 
 }

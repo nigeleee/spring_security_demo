@@ -13,5 +13,12 @@ public interface UserService {
     void saveVerificationTokenForUser(String token, User user);
 
     String validateVerificaionToken(String token);
+
+    User getCurrentUser();
+
+    User getUserByEmail(String email);
+
+    boolean validateUserPassword(User user, String password);
+
     
 }
