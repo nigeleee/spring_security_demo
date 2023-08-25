@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,11 +53,13 @@ public class WebSecurityConfig {
                 .and()
                 .csrf()
                 .disable()
-                .authorizeHttpRequests()
-                .antMatchers(WHITE_LIST_URLS).permitAll()
-                .antMatchers("/user/add").authenticated()
+                .authorizeHttpRequests() 
+                .antMatchers(WHITE_LIST_URLS).permitAll() //anyone can access
+                .antMatchers("/user/add").authenticated() //must be authenticated
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(Customizer.withDefaults());
+                // .formLogin(Customizer.withDefaults());
 
         return http.build();
     }
