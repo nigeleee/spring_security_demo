@@ -3,9 +3,13 @@ customers can add products to cart as a generic user and a user that can sign up
 
 key points to work on
 - oauth2 (managed to implement it. need to revise uri for before deployment, add to service layer for authenticating user in shop)
+- 
 - figure a way to use env for gmail and google credentials for email and oauth2
 - reset password
 - resend verification token
+- universal logout for tradtional and oauth2
+- deleting tokens
+- how to identify how user logged in, and how to store their data
 - alert for do you want to log out 
 - **TO DO **
      -check get cart items code **
@@ -23,3 +27,4 @@ completed
 - adding to cart, displaying cart items, and checking out with confirmation email and receipt sent to user
 - http sessions for guest user to add to cart. cart items wont be persisted on sql
 - integrate user log in and save user credentials to database, persist data, like cart items in sql
+- oauth2 login only
