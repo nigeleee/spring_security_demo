@@ -1,6 +1,6 @@
 package sg.edu.nus.iss.spring_security_demo.service;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,10 @@
 package sg.edu.nus.iss.spring_security_demo.controllers;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -9,7 +13,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +37,7 @@ import sg.edu.nus.iss.spring_security_demo.service.UserService;
 import sg.edu.nus.iss.spring_security_demo.util.JwtUtil;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class RegistrationController {
 
     @Autowired
@@ -40,6 +50,8 @@ public class RegistrationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserDetailsSvc userDetailsSvc;
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     @PostMapping("/register")
     public String registerUser(@RequestBody UserModel userModel, final HttpServletRequest request) {
@@ -63,7 +75,7 @@ public class RegistrationController {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
             throws Exception {
         try {
@@ -80,14 +92,17 @@ public class RegistrationController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
+
     // use angular to blacklist token on client side
-    @PostMapping(path="/signout")
+    @PostMapping(path="/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         new SecurityContextLogoutHandler().logout(request, null, null);
         return ResponseEntity.ok("Logged Out");
     }
 
 }    
+
+
     
 
     // @GetMapping("/login")

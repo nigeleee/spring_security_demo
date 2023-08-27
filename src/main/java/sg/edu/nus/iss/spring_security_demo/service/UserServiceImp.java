@@ -124,7 +124,6 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean validateUserPassword(User user, String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String storedHash = user.getPassword(); // Get the stored hash from the database
         return passwordEncoder.matches(password, storedHash);
 

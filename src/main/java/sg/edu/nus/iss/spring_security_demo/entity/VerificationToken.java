@@ -3,7 +3,7 @@ package sg.edu.nus.iss.spring_security_demo.entity;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

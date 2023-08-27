@@ -1,7 +1,7 @@
 package sg.edu.nus.iss.spring_security_demo.entity;
 
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Data;
 
 

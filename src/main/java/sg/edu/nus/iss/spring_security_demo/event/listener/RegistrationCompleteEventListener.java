@@ -2,7 +2,7 @@ package sg.edu.nus.iss.spring_security_demo.event.listener;
 
 import java.util.UUID;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -33,7 +33,7 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
         userService.saveVerificationTokenForUser(token, user); 
 
         //send email to user
-        String url = event.getApplicationUrl() + "/verifyRegistration?token=" + token;
+        String url = event.getApplicationUrl() + "/api/verifyRegistration?token=" + token;
         // String body = "Click on the link to verify your account: " + url;
         String body = "<!DOCTYPE html>" + 
                         "<html>" +
