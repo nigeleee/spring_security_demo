@@ -1,0 +1,14 @@
+.quantityButton {
+  background-color: white;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 2px 3px 4px 2px rgba(0, 0, 0, 0.25);
+  color: black;
+  text-align: center;
+  height: 30px;
+  width: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+

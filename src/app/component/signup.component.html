@@ -1,0 +1,74 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h3>Create Account</h3>
+        </div>
+        <div class="card-body">
+          <form  class="form-group" [formGroup]="signupForm" (ngSubmit)="createUser()">
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="firstName" placeholder="First Name">
+                <div class="text-danger" *ngIf="signupForm.controls['firstName'].touched && signupForm.controls['firstName'].errors?.['required']">
+                  Please enter a name (Mandatory)
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="lastName" placeholder="Surname">
+                <div class="text-danger" *ngIf="signupForm.controls['lastName'].touched && signupForm.controls['lastName'].errors?.['required']">
+                  Please enter a name (Mandatory)
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="email" placeholder="Email">
+              <span class="text-danger" *ngIf="duplicateEmailMsg">{{duplicateEmailMsg}}</span>
+                <div class="text-danger" *ngIf="signupForm.controls['email'].touched && signupForm.controls['email'].errors?.['required']">
+                  Please enter an email address (Mandatory)
+                </div>
+            </div>
+            <br>
+            <!-- <div class="form-group">
+              <input type="text" class="form-control" formControlName="phone" maxLength="8" placeholder="Mobile Number">
+                <span class="text-danger" *ngIf="signupForm.controls['phone'].touched && signupForm.controls['phone'].errors?.['required']">
+                  Please enter a Mobile Number (Mandatory)
+                </span>
+                <span class="text-danger" *ngIf="signupForm.controls['phone'].touched && signupForm.controls['phone'].errors?.['maxLength']">
+                  Please enter only 8 digits
+                </span>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="address" placeholder="Address">
+                <div class="text-danger" *ngIf="signupForm.controls['address'].touched && signupForm.controls['address'].errors?.['required']">
+                  Please enter a residential address (Mandatory)
+                </div>
+            </div> -->
+            <div class="form-group position-relative">
+              <div class="input-group">
+                <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password" placeholder="New password">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" (click)="showPassword = !showPassword">{{showPassword ? 'Hide' : 'Show'}}</button>
+                </div>
+              </div>
+              <div class="text-danger" *ngIf="signupForm.controls['password'].touched && signupForm.controls['password'].errors?.['required']">
+                Please enter an 8-character alphanumeric password (Mandatory)
+              </div>
+            </div>
+            <br>
+            <!-- <div class="form-group">
+              <input type="password" class="form-control" formControlName="retypePassword" placeholder="Retype new password">
+              <div class="text-danger" *ngIf="signupForm.controls['retypePassword'].touched && signupForm.controls['retypePassword'].errors?.['required']">
+                Please retype your password (Mandatory)
+              </div>
+            </div> -->
+            <button class="btn btn-primary" type="submit" [disabled]="!signupForm.valid">Submit</button>
+            &nbsp;&nbsp;
+            <a [routerLink]="['/home']" class="btn btn-light">Back</a>
+          </form>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

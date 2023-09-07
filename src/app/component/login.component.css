@@ -1,0 +1,22 @@
+.oauth2button {
+  background-color: white;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 2px 3px 4px 2px rgba(0, 0, 0, 0.25);
+  height: 40px;
+  /* margin: 10px;
+  padding: 10px; */
+  color: black;
+  text-align: center;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.oauth2button img {
+  width: 40px;
+  height: 40px;
+}
+
+

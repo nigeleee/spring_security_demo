@@ -1,23 +1,36 @@
-<div class="container">
-  <h2>Login</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" id="email" formControlName="email" class="form-control">
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h3>Login</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <input type="email" id="email" formControlName="email" class="form-control" placeholder="Email">
+              <span class="text-danger" *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['required']">Required Field</span>
+              <span class="text-danger" *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['email']">Wrong email format</span>
+              <span class="text-danger" *ngIf="emailErrorMsg">{{emailErrorMsg}}</span>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="password" id="password" formControlName="password" class="form-control" minLength="8" placeholder="Password">
+              <span class="text-danger" *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors?.['required']">Required Field</span>
+              <span class="text-danger" *ngIf="passwordErrorMsg">{{passwordErrorMsg}}</span>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+          </form>
+          <br>
+          <button class="oauth2button" (click)="initiateOAuth2Login()">
+            <img src="https://pbs.twimg.com/profile_images/1605297940242669568/q8-vPggS_400x400.jpg">
+            &nbsp;<span>Login with Google</span>
+          </button>
+          <br>
+          <span>Don't have an account? <a routerLink="/signup">Create one</a></span>
+        </div>
+      </div>
     </div>
-
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" formControlName="password" class="form-control">
-    </div>
-
-    <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button>
-  </form>
-
-  <!-- OAuth2 Login Button -->
-
-    <!-- <button (click)="oauth2Login()" class="btn btn-secondary">Login with OAuth2</button> -->
-
-  <asl-google-signin-button *ngIf="!user" ></asl-google-signin-button>
+  </div>
 </div>

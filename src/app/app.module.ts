@@ -8,10 +8,10 @@ import { HttpClientModule } from "@angular/common/http";
 import { LoginComponent } from './component/login.component';
 import { HomeComponent } from './component/home.component';
 import { ProductsComponent } from './component/products.component';
-import { OAuth2Component } from './component/o-auth2.component';
-import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
-import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
-
+import { SignupComponent } from './component/signup.component';
+import { ProductbyidComponent } from './component/productbyid.component';
+import { AboutComponent } from './component/about.component';
+import { CartComponent } from './component/cart.component';
 
 @NgModule({
   declarations: [
@@ -19,34 +19,19 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
     LoginComponent,
     HomeComponent,
     ProductsComponent,
-    OAuth2Component
+    SignupComponent,
+    ProductbyidComponent,
+    AboutComponent,
+    CartComponent
   ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule,
-    SocialLoginModule
+    HttpClientModule
   ],
-  providers: [
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '570601949581-69gaf2kv0n8gaaa7edu7qs291290bel2.apps.googleusercontent.com'
-            )
-          },
-        ],
-        onError: (err) => {
-          console.error(err);
-        }
-      } as SocialAuthServiceConfig,
-    }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

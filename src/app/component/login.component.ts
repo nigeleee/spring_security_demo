@@ -1,30 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../service/authentication.service';
 import { Router } from '@angular/router';
-import { GoogleLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
-
-
-
+import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm!: FormGroup;
   user: any;
   loggedIn: any;
+  loginMethod!: any;
+  sub$!: Subscription;
+  emailErrorMsg: string = '';
+  passwordErrorMsg: string = '';
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthenticationService, private router: Router, private socialAuthService: SocialAuthService) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthenticationService, private router: Router, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+
   }
 
   onSubmit() {
@@ -36,49 +39,41 @@ export class LoginComponent implements OnInit {
     const val = this.loginForm.value;
 
     this.authService.login(val.email, val.password)
-      .subscribe(
-        () => {
+      .subscribe({
+        next : (response) => {
           console.log("User is logged in");
+          localStorage.setItem('loginMethod', 'jwt');
           this.router.navigate(['/products']);
-
+          this.emailErrorMsg = '';  // Clear any existing error messages
+          this.passwordErrorMsg = '';  // Clear any existing error messages
+        },
+        error: (err) => {
+          if (err.status === 401) {
+            const message = err.error.message.toLowerCase();
+            if (message.includes('email')) {
+              this.emailErrorMsg = 'Invalid email';
+            } else if (message.includes('password')) {
+              this.passwordErrorMsg = 'Invalid password';
+            } else {
+              this.emailErrorMsg = 'An unexpected error occurred';
+              this.passwordErrorMsg = 'An unexpected error occurred';
+            }
+          }
+          console.log(err);
         }
-      );
+      }
+    );
+
   }
 
-  oauth2Login(): void {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then(user => {
-        this.user = user;
-        this.loggedIn = true;
-        console.log('User logged in:', user);
-        this.router.navigate(['/products']); // Redirect to products page
-      })
-      .catch(error => {
-        console.error('Error signing in:', error);
-      });
+  ngOnDestroy(): void {
+    if (this.sub$) {
+      this.sub$.unsubscribe();
+    }
   }
 
-  // login() {
-  //   this.authService.login('email', 'password').subscribe((data:any) => {
-  //     console.log(data);
-  //     // Store token or session information
-  //     // Navigate to product page
-  //     this.router.navigate(['/product']);
-  //   });
-  // }
-
-
-  // oauth2Login() {
-
-  //   // return this.authService.oauth2Login();
-  //   this.socialAuthService.authState.subscribe((user) => {
-  //     this.user = user;
-  //     this.loggedIn = (user != null);
-  //     console.log(this.user);
-  //   });
-
-  // }
-
-
+  initiateOAuth2Login() {
+    this.authService.OAuth2Login();
+  }
 
 }

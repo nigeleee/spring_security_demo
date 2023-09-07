@@ -1,1 +1,19 @@
-<p>products works!</p>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngFor="let product of products">
+      <div class="card">
+        <img class="card-img-top" [src]="'assets/' + product.name + '.jpg'" alt="{{product.name}}">
+        <div class="card-body">
+          <h5 class="card-title">Lee's {{ product.name }} Kimchi</h5>
+          <p class="card-text"><strong>${{ product.price }}</strong></p>
+          <!-- <p class="card-text">Quantity: {{ product.quantity }}</p> -->
+          <p class="card-text">Size: {{ product.size }}</p>
+          <a [routerLink]="['/product/', product.productId]" class="btn btn-primary">View Product</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<button (click)="logout()">Logout</button>

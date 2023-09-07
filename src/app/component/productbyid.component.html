@@ -1,0 +1,26 @@
+<div class="container mt-5" *ngIf="product">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-4">
+      <div class="card">
+        <img class="card-img-top" [src]="'assets/' + product.name + '.jpg'" alt="{{product.name}}">
+        <div class="card-body">
+          <h5 class="card-title">Lee's {{ product.name }} Kimchi</h5>
+          <p class="card-text"><strong>${{ product.price }}</strong></p>
+          <!-- <p class="card-text">Quantity: {{ product.quantity }}</p>
+          <p class="card-text">Size: {{ product.size }}</p> -->
+          <hr>
+          <div class="text-center">
+            <button class="quantityButton" (click)="minus()">-</button>
+            &nbsp; <span>{{ quantity }}</span>
+            &nbsp; <button class="quantityButton" (click)="add()">+</button>
+          </div>
+          <br>
+          <div class="text-center">
+            <button class="btn btn-primary" (click)="addToCart()">Add to Cart</button>
+            &nbsp; <button class="btn btn-primary" (click)="buyNow()">Buy Now</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
