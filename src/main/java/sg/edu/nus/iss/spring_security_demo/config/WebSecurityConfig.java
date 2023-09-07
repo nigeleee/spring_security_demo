@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,29 +41,30 @@ public class WebSecurityConfig {
             "/api/guest/add", 
             "/api/logout",
             "/api/success",
-            "/api/oauth2/authorization/google"
+            "/api/logout/oauth2",
+            "/api/products",
+            "api/product/{id}"
+            // "/api/oauth2/authorization/google"
 
     };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
              http
-                
+                .csrf()
+                .disable()
+                .cors()
+                .and()
                 .authorizeHttpRequests() 
                 .requestMatchers(WHITE_LIST_URLS).permitAll() //anyone can access
                 .requestMatchers("/api/user/**").hasRole("USER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated() //must be authenticated
                 .and()
-                // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
-                // .defaultSuccessUrl("/success", true)
-                .defaultSuccessUrl("/success", true)
-                .and()
-                .cors()
-                .and()
-                .csrf()
-                .disable();
+                .defaultSuccessUrl("/api/success", true);
+               
 
             return http.build();
     }
@@ -94,7 +94,9 @@ public class WebSecurityConfig {
 
         // Redirecting to a specific URL after logout.
         response.sendRedirect("http://localhost:4200/login?logout");
-    };
-}
+        };
+    }
+
+    
 
 }

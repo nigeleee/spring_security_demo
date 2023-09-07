@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,15 +41,39 @@ public class CartController {
     @Autowired
     private UserService userService;
 
+    @GetMapping(path="/products", produces=MediaType.APPLICATION_JSON_VALUE) 
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> result = productService.getAllProducts();
+
+        if (result != null) {
+        return ResponseEntity.ok().body(result);
+
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+
+    }
+    
+    @GetMapping(path="/products/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        try {
+            Product result = productService.getProductById(id);
+            return ResponseEntity.ok().body(result);
+
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     // For authenticated users
-    @PostMapping("/user/add")
+    @PostMapping(path="/user/add", consumes=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addUserProductToCart(@RequestParam Long productId, @RequestParam int quantity) {
         User user = userService.getCurrentUser();
         if (user != null) {
             cartItemService.addToUserCart(productId, user, quantity);
-            return ResponseEntity.ok("Product added to user's cart");
+            return ResponseEntity.ok("{\"message\":\"Product added to cart\"}");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\":\"User not authenticated\"}");
         }
     }
 
@@ -61,7 +87,7 @@ public class CartController {
         }
         cartItems.put(productId, quantity);
         session.setAttribute("cartItems", cartItems);
-        return ResponseEntity.ok("Product added to guest's cart");
+        return ResponseEntity.ok("{\"message\":\"Product added to guest's cart\"}");
     }
 
     // @PostMapping("/add-test")
@@ -116,13 +142,13 @@ public class CartController {
     @DeleteMapping("/delete/{cartItemId}")
     public ResponseEntity<String> removeCartItem(@PathVariable Long cartItemId, HttpSession session) {
         cartItemService.removeCartItem(cartItemId);
-        return ResponseEntity.ok("Cart item removed");
+        return ResponseEntity.ok("{\"message\":\"Cart item removed\"}");
     }
 
     @PostMapping("/clear-cart")
     public ResponseEntity<String> clearCart(HttpSession session) {
         session.removeAttribute("cartItems");
-        return ResponseEntity.ok("Cart cleared");
+        return ResponseEntity.ok("{\"message\":\"Cart Cleared\"}");
     }
 
     @PostMapping("/checkout")
@@ -135,7 +161,7 @@ public class CartController {
 
         session.removeAttribute("cartItems");
 
-        return ResponseEntity.ok("Checkout completed");
+        return ResponseEntity.ok("{\"message\":\"Checkout Completed\"}");
     }
 
 }

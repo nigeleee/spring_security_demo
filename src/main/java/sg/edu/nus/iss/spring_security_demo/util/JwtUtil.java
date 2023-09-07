@@ -58,4 +58,17 @@ public class JwtUtil {
         }
 
     }
+
+    public long getExpirationTimeMillisFromToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getExpiration().getTime() - System.currentTimeMillis();
+        } catch (Exception e) {
+            return -1;
+        }
+    }
 }
