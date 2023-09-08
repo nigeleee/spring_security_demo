@@ -7,8 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +39,7 @@ import sg.edu.nus.iss.spring_security_demo.event.RegistrationCompleteEvent;
 import sg.edu.nus.iss.spring_security_demo.model.AuthenticationResponse;
 import sg.edu.nus.iss.spring_security_demo.model.AuthenticationRequest;
 import sg.edu.nus.iss.spring_security_demo.model.UserModel;
+import sg.edu.nus.iss.spring_security_demo.service.EmailSenderService;
 import sg.edu.nus.iss.spring_security_demo.service.JwtBlacklistService;
 import sg.edu.nus.iss.spring_security_demo.service.UserDetailsSvc;
 import sg.edu.nus.iss.spring_security_demo.service.UserService;
@@ -57,33 +60,77 @@ public class RegistrationController {
     @Autowired
     private UserDetailsSvc userDetailsSvc;
     @Autowired
+    private EmailSenderService emailSenderService;
+    @Autowired
     private JwtBlacklistService blacklistService;
 
-    @PostMapping(path="/register", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> registerUser(@RequestBody UserModel userModel, final HttpServletRequest request) throws Exception{
-        
+    // @Value("${redirect.login.url}")
+    // private String redirectToLoginUrl;
+
+    @PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> registerUser(@RequestBody UserModel userModel, HttpServletRequest request)
+            throws Exception {
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>Received request to register user: " + userModel); // Debugging
+                                                                                                        // line
+
         try {
-           User user = userService.registerUser(userModel);
+            User user = userService.registerUser(userModel);
 
             System.out.println(">>>>>>>>>>>>>>>>>> user details are:" + user);
 
-            publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request))); 
+            // publisher.publishEvent(new RegistrationCompleteEvent(user, "https://" +
+            // applicationUrl(request)));
+            String token = UUID.randomUUID().toString();
+            userService.saveVerificationTokenForUser(token, user);
+
+            // Generate the email content
+            String url = applicationUrl(request) + "/api/verifyRegistration?token=" + token;
+            String body = "<!DOCTYPE html>" +
+                    "<html>" +
+                    "<body>" +
+                    "    <div class=\"container\">" +
+                    "        <h2>Welcome to our website!</h2>" +
+                    "        <p>Thank you for registering. Please click the button below to verify your account:</p>" +
+                    "        <a class=\"btn\" href=\"" + url + "\">Verify Account</a>" +
+                    "        <p>If the button doesn't work, you can also copy and paste the following link into your browser:</p>"
+                    +
+                    "        <p><a href=\"" + url + "\">" + url + "</a></p>" +
+                    "        <p>If you did not request this registration, you can safely ignore this email.</p>" +
+                    "        <p>Best regards,<br>Your Website Team</p>" +
+                    "    </div>" +
+                    "</body>" +
+                    "</html>";
+            String subject = "Account Verification";
+
+            try {
+                emailSenderService.sendHtmlEmail(user.getEmail(), body, subject);
+            } catch (Exception e) {
+                System.out.println("Failed to send email. Exception is: " + e.getMessage());
+                e.printStackTrace();
+            }
 
         } catch (Exception e) {
+            System.out.println(">>>>>>>>>>>>>>>>>>>> Exception occurred: " + e.getMessage()); // Debugging line
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"Email exists\"}");
         }
-        
+
         return ResponseEntity.ok("{\"message\":\"Registered Successfully\"}");
     }
 
     @GetMapping("/verifyRegistration")
-    public String verifyRegistration(@RequestParam("token") String token) {
+    public ResponseEntity<String> verifyRegistration(@RequestParam("token") String token, HttpServletResponse response)
+            throws IOException {
         String result = userService.validateVerificaionToken(token);
-        if (result.equalsIgnoreCase("valid")) {
-            return "User Verified Successfully";
-        }
 
-        return "Bad User";
+        if (result.equalsIgnoreCase("valid")) {
+            // response.sendRedirect(redirectToLoginUrl);
+            return ResponseEntity.ok(
+                    "{\"message\":\"Email verified Successfully. You may now close this page and login with your registered email address and password.\"}");
+
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\":\"Bad User\"}");
+        }
     }
 
     private String applicationUrl(HttpServletRequest request) {
@@ -110,7 +157,8 @@ public class RegistrationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\":\"Incorrect password\"}");
         }
 
-        // final UserDetails userDetails = userDetailsSvc.loadUserByUsername(authenticationRequest.getEmail());
+        // final UserDetails userDetails =
+        // userDetailsSvc.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));

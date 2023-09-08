@@ -16,14 +16,24 @@ public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
-    // @Value("${email}")
-    // private String email;
+    @Value("${MAIL_USERNAME}")
+    private String email;
 
     public void sendSimpleEmail(String toEmail, String body, String subject) throws MessagingException {
         
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> In sending email service");
+        if(email == null || email.isEmpty()) {
+            System.out.println(">>>>>>>>>>>>>>>>> Email is null or empty");
+        } else {
+            System.out.println(">>>>>>>>>>>>>>>> Email is: " + email);
+        }
+
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom("nigeleee@gmail.com");
+        // message.setFrom("nigeleee@gmail.com");
+        message.setFrom(email);
+
+
         message.setTo(toEmail);
         message.setText(body);
         message.setSubject(subject);
@@ -34,10 +44,14 @@ public class EmailSenderService {
     }
 
     public void sendHtmlEmail(String toEmail, String body, String subject) throws MessagingException {
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> In sending email service");
+
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setFrom("nigeleee@gmail.com");
+        // helper.setFrom("nigeleee@gmail.com");
+        helper.setFrom(email);
         helper.setTo(toEmail);
         helper.setSubject(subject);
         helper.setText(body, true); // Set HTML content

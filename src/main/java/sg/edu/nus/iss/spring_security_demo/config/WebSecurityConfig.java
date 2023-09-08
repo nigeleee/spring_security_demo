@@ -41,7 +41,7 @@ public class WebSecurityConfig {
             "/api/guest/add", 
             "/api/logout",
             "/api/success",
-            "/api/logout/oauth2",
+            // "/api/logout/oauth2",
             "/api/products",
             "api/product/{id}"
             // "/api/oauth2/authorization/google"
@@ -56,14 +56,14 @@ public class WebSecurityConfig {
                 .cors()
                 .and()
                 .authorizeHttpRequests() 
-                .requestMatchers(WHITE_LIST_URLS).permitAll() //anyone can access
                 .requestMatchers("/api/user/**").hasRole("USER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated() //must be authenticated
+                .requestMatchers("api/logout").authenticated() //must be authenticated
+                .anyRequest().permitAll() //anyone can access
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login()
-                .defaultSuccessUrl("/api/success", true);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                // .oauth2Login()
+                // .defaultSuccessUrl("/api/success", true);
                
 
             return http.build();
@@ -86,16 +86,16 @@ public class WebSecurityConfig {
         return provider;
     }
 
-    @Bean
-    public LogoutSuccessHandler oidcLogoutSuccessHandler() {
-    return (request, response, authentication) -> {
-        // Your custom logic to handle local logout.
-        // For example, you can revoke tokens here, log an event, etc.
+    // @Bean
+    // public LogoutSuccessHandler oidcLogoutSuccessHandler() {
+    // return (request, response, authentication) -> {
+    //     // Your custom logic to handle local logout.
+    //     // For example, you can revoke tokens here, log an event, etc.
 
-        // Redirecting to a specific URL after logout.
-        response.sendRedirect("http://localhost:4200/login?logout");
-        };
-    }
+    //     // Redirecting to a specific URL after logout.
+    //     response.sendRedirect("http://localhost:4200/login?logout");
+    //     };
+    // }
 
     
 
