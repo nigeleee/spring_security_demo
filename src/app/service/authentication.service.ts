@@ -43,9 +43,10 @@ export class AuthenticationService {
   // }
 
   OAuth2Login() {
-    debugger;
+
     localStorage.setItem('loginMethod', 'oauth2');
     window.location.href = this.oauthUrl;
+
     // window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   }
 
