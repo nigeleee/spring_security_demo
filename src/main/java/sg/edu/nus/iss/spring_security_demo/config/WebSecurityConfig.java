@@ -41,15 +41,15 @@ public class WebSecurityConfig {
             "/api/guest/add", 
             "/api/logout",
             "/api/success",
-            // "/api/logout/oauth2",
+            "/api/logout/oauth2",
             "/api/products",
-            "api/product/{id}"
-            // "/api/oauth2/authorization/google"
+            "api/product/{id}",
+            "/api/oauth2/authorization/google"
 
     };
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
              http
                 .csrf()
                 .disable()
@@ -58,16 +58,17 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests() 
                 .requestMatchers("/api/user/**").hasRole("USER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("api/logout").authenticated() //must be authenticated
+                // .requestMatchers("api/logout").authenticated() //must be authenticated
                 .anyRequest().permitAll() //anyone can access
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-                // .oauth2Login()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login()
+                .successHandler(customOAuth2SuccessHandler());
                 // .defaultSuccessUrl("/api/success", true);
-               
 
             return http.build();
     }
+
       @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(11);
@@ -96,6 +97,10 @@ public class WebSecurityConfig {
     //     response.sendRedirect("http://localhost:4200/login?logout");
     //     };
     // }
+    @Bean
+    public CustomOAuth2SuccessHandler customOAuth2SuccessHandler() {
+        return new CustomOAuth2SuccessHandler();
+    }
 
     
 

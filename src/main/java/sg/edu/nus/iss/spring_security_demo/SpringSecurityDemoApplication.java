@@ -13,14 +13,18 @@ public class SpringSecurityDemoApplication {
 		SpringApplication.run(SpringSecurityDemoApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("*");
-			}
-		};
-	}
+	// @Bean
+	// public WebMvcConfigurer corsConfigurer() {
+	// 	return new WebMvcConfigurer() {
+	// 		@Override
+	// 		public void addCorsMappings(CorsRegistry registry) {
+	// 			// registry.addMapping("/**").allowedOrigins("*");
+	// 			registry.addMapping("/**")
+    //                     .allowedOrigins("https://miniprojectdemo-delta.vercel.app/")
+    //                     .allowedMethods("GET", "POST", "PUT", "DELETE");
+				
+	// 		}
+	// 	};
+	// }
 }
 
