@@ -73,6 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   initiateOAuth2Login() {
+    console.log(">>>>>>>>>>>>>> initiated oauth2 login")
     this.authService.OAuth2Login();
   }
 

@@ -1,5 +1,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api/',
-  oauthUrl: 'http://localhost:8080/oauth2/authorization/google'
+  oauthUrl: 'http://localhost:8080/oauth2/authorization/google',
+  apiProductsUrl: 'http://localhost:8080/api/products',
+  apiRegisterUrl: 'http://localhost:8080/api/register'
 };

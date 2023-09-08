@@ -2,14 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { Observable, of, tap } from 'rxjs';
-// import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  private apiUrl = 'http://localhost:8080/api/';
+  private apiUrl: string = 'https://miniprojectdemo-production.up.railway.app/api/';
+  private oauthUrl: string = 'https://miniprojectdemo-production.up.railway.app/oauth2/authorization/google';
+
+  // private apiUrl = 'http://localhost:8080/api/';
   // private apiUrl = environment.apiUrl;
   // private oauthUrl = environment.oauthUrl;
 
@@ -40,9 +43,10 @@ export class AuthenticationService {
   // }
 
   OAuth2Login() {
+    debugger;
     localStorage.setItem('loginMethod', 'oauth2');
-    // window.location.href = this.oauthUrl;
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = this.oauthUrl;
+    // window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   }
 
   logout(loginMethod: any): Observable<any> {
