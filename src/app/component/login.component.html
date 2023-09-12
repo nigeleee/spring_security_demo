@@ -14,8 +14,13 @@
               <span class="text-danger" *ngIf="emailErrorMsg">{{emailErrorMsg}}</span>
             </div>
             <br>
-            <div class="form-group">
-              <input type="password" id="password" formControlName="password" class="form-control" minLength="8" placeholder="Password">
+            <div class="form-group position-relative">
+              <div class="input-group">
+                <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password" minLength="8" placeholder="Password">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" (click)="showPassword = !showPassword">{{showPassword ? 'Hide' : 'Show'}}</button>
+                </div>
+              </div>
               <span class="text-danger" *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors?.['required']">Required Field</span>
               <span class="text-danger" *ngIf="passwordErrorMsg">{{passwordErrorMsg}}</span>
             </div>

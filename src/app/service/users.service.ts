@@ -12,8 +12,8 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
 
-  private  apiRegisterUrl: string = 'https://miniprojectdemo-production.up.railway.app/api/register'
-  // private apiUrl : string = "http://localhost:8080/api/register";
+  // private  apiRegisterUrl: string = 'https://miniprojectdemo-production.up.railway.app/api/register'
+  private apiRegisterUrl : string = "http://localhost:8080/api/register";
   // private apiRegisterUrl = environment.apiRegisterUrl;
 
   create(users: Users) : Observable<Users> {

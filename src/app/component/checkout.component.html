@@ -1,0 +1,35 @@
+<div class="container text-center mt-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h4>Your Order</h4>
+        </div>
+        <div class="card-body" *ngFor="let item of cartItems">
+          <ul>
+            <li>{{ item.name }}</li>
+            <li>{{ item.quantity }}</li>
+            <li>{{ item.totalPrice }}</li>
+          </ul>
+        </div>
+        <hr>
+        <p>Total amount: {{ this.totalAmount }} </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card text-center">
+        <div class="card-title">
+          <h6>Payment Methods</h6>
+        </div>
+        <div class="card-body d-flex justify-content-center">
+          <div id="paypal-button-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

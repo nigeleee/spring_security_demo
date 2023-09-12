@@ -12,6 +12,10 @@ import { SignupComponent } from './component/signup.component';
 import { ProductbyidComponent } from './component/productbyid.component';
 import { AboutComponent } from './component/about.component';
 import { CartComponent } from './component/cart.component';
+import { CheckoutComponent } from './component/checkout.component';
+import { GuestCheckoutComponent } from './component/guest-checkout.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialsModule } from './materials/materials.module';
 
 @NgModule({
   declarations: [
@@ -22,14 +26,18 @@ import { CartComponent } from './component/cart.component';
     SignupComponent,
     ProductbyidComponent,
     AboutComponent,
-    CartComponent
+    CartComponent,
+    CheckoutComponent,
+    GuestCheckoutComponent,
   ],
 
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

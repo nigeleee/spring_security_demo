@@ -7,6 +7,8 @@ import { SignupComponent } from './component/signup.component';
 import { ProductbyidComponent } from './component/productbyid.component';
 import { AboutComponent } from './component/about.component';
 import { CartComponent } from './component/cart.component';
+import { CheckoutComponent } from './component/checkout.component';
+import { GuestCheckoutComponent } from './component/guest-checkout.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // redirect to `home` route
@@ -16,12 +18,17 @@ const routes: Routes = [
   { path: 'products', component: ProductsComponent, title: 'Products' },
   { path: 'product/:id', component: ProductbyidComponent},
   { path: 'cart', component: CartComponent},
-  { path: 'about', component: AboutComponent}
+  { path: 'checkout', component: CheckoutComponent},
+  { path: 'about', component: AboutComponent},
+  { path: 'guest-checkout', component: GuestCheckoutComponent},
+
+
 
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  // imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

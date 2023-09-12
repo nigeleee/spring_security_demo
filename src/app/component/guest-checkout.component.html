@@ -1,0 +1,91 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 border-div">
+      <div class="card">
+        <div class="card-header">
+          <h3>Enter your Billing Details</h3>
+        </div>
+        <div class="card-body">
+          <form  class="form-group" [formGroup]="detailsForm">
+            <div class="form-group">
+              <input type="hidden" value="productId">
+            </div>
+            <div class="form-group">
+              <input type="hidden" value="quantity">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="firstName" placeholder="First Name">
+                <div class="text-danger" *ngIf="detailsForm.controls['firstName'].touched && detailsForm.controls['firstName'].errors?.['required']">
+                  Please enter a name (Mandatory)
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="lastName" placeholder="Surname">
+                <div class="text-danger" *ngIf="detailsForm.controls['lastName'].touched && detailsForm.controls['lastName'].errors?.['required']">
+                  Please enter a name (Mandatory)
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="email" placeholder="Email">
+                <div class="text-danger" *ngIf="detailsForm.controls['email'].touched && detailsForm.controls['email'].errors?.['required']">
+                  Please enter an email Address (Mandatory)
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="phone" maxLength="8" placeholder="Mobile Number">
+                <span class="text-danger" *ngIf="detailsForm.controls['phone'].touched && detailsForm.controls['phone'].errors?.['required']">
+                  Please enter a Mobile Number (Mandatory)
+                </span>
+                <span class="text-danger" *ngIf="detailsForm.controls['phone'].touched && detailsForm.controls['phone'].errors?.['maxLength']">
+                  Please enter only 8 digits
+                </span>
+            </div>
+            <br>
+            <div class="form-group">
+              <input type="text" class="form-control" formControlName="address" placeholder="Address">
+                <div class="text-danger" *ngIf="detailsForm.controls['address'].touched && detailsForm.controls['address'].errors?.['required']">
+                  Please enter a residential Address (Mandatory)
+                </div>
+            </div>
+            <br>
+            <div class="container text-center">
+              <div class="card-body d-flex justify-content-center">
+                <div [hidden]="!detailsForm.valid" id="paypal-button-container" ></div>
+              </div>
+              <p *ngIf="!detailsForm.valid"><small>Please complete the form to enable payment.</small></p>
+              <p [hidden]="!detailsForm.valid"><small>Payment Methods</small></p>
+            </div>
+          </form>
+          <br>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 cart-bg">
+      <div class="card border-0">
+        <div class="card-header border-0">
+          <h4>Your Order</h4>
+        </div>
+        <div class="card-body" *ngFor="let item of cartItems">
+          <ul>
+            <li>{{ item.name }}</li>
+            <li>{{ item.quantity }}</li>
+            <li>{{ item.totalPrice }}</li>
+          </ul>
+        </div>
+        <hr>
+        <p>Total amount: {{ this.totalAmount }} </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <br>
+<button class="btn btn-primary" type="submit" [disabled]="!detailsForm.valid">Submit</button>
+&nbsp;&nbsp; -->
+<a [routerLink]="['/cart']" class="btn btn-light">Back</a>
+
+

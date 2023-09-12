@@ -11,9 +11,10 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  private apiProductsUrl: string = 'https://miniprojectdemo-production.up.railway.app/api/products';
+  // private apiProductsUrl: string = 'https://miniprojectdemo-production.up.railway.app/api/products';
 
-  // private apiUrl : string = "http://localhost:8080/api/products";
+  private apiProductsUrl : string = "http://localhost:8080/api/products";
+
   // private apiProductsUrl = environment.apiProductsUrl;
 
   getProducts() : Observable<Products[]> {
@@ -24,11 +25,12 @@ export class ProductService {
     return this.http.get<Products[]>(this.apiProductsUrl, {headers : headers});
   }
 
-  getProductById(id: string) : Observable<Products> {
+  getProductById(productId: number) : Observable<Products> {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json');
 
     // return this.http.get<Products>(`${this.apiUrl}/${id}`, {headers : headers});
-    return this.http.get<Products>(`${this.apiProductsUrl}/${id}`, {headers : headers});
+    return this.http.get<Products>(`${this.apiProductsUrl}/${productId}`, {headers : headers});
   }
+
 }

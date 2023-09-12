@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   sub$!: Subscription;
   emailErrorMsg: string = '';
   passwordErrorMsg: string = '';
+  showPassword: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private authService: AuthenticationService, private router: Router, private http: HttpClient) { }
 
@@ -66,15 +67,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnDestroy(): void {
-    if (this.sub$) {
-      this.sub$.unsubscribe();
-    }
-  }
 
   initiateOAuth2Login() {
     console.log(">>>>>>>>>>>>>> initiated oauth2 login")
     this.authService.OAuth2Login();
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub$) {
+      this.sub$.unsubscribe();
+    }
   }
 
 }

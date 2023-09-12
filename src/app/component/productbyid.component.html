@@ -6,6 +6,7 @@
         <div class="card-body">
           <h5 class="card-title">Lee's {{ product.name }} Kimchi</h5>
           <p class="card-text"><strong>${{ product.price }}</strong></p>
+          <p class="card-text">{{ product.description }}</p>
           <!-- <p class="card-text">Quantity: {{ product.quantity }}</p>
           <p class="card-text">Size: {{ product.size }}</p> -->
           <hr>
@@ -17,10 +18,20 @@
           <br>
           <div class="text-center">
             <button class="btn btn-primary" (click)="addToCart()">Add to Cart</button>
-            &nbsp; <button class="btn btn-primary" (click)="buyNow()">Buy Now</button>
+            &nbsp; <button class="btn btn-primary" (click)="goToCart()">Cart</button>
         </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+<div *ngIf="showCart" class="cart-side-box">
+  <h3>Your Cart</h3>
+  <div *ngFor="let item of cart">
+    <p>{{ item.name }} | Quantity: {{ item.quantity }} | Total Price: {{ item.totalPrice }}</p>
+    <button class="btn btn-danger" (click)="removeCartItem(item)">Remove</button>
+  </div>
+  <br>
+  <button class="btn btn-warning" (click)="clearCart()">Clear</button>
+  &nbsp;<button class="hide-button" (click)="hideCart()">Close</button>
 </div>

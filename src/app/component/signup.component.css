@@ -1,7 +1,0 @@
-.toggle-password {
-  cursor: pointer;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-50%);
-  z-index: 2; /* Optional, to make sure the button floats on top */
-}

@@ -9,10 +9,11 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthenticationService {
 
-  private apiUrl: string = 'https://miniprojectdemo-production.up.railway.app/api/';
-  private oauthUrl: string = 'https://miniprojectdemo-production.up.railway.app/oauth2/authorization/google';
+  // private apiUrl: string = 'https://miniprojectdemo-production.up.railway.app/api/';
+  // private oauthUrl: string = 'https://miniprojectdemo-production.up.railway.app/oauth2/authorization/google';
 
-  // private apiUrl = 'http://localhost:8080/api/';
+  private apiUrl = 'http://localhost:8080/api/';
+  private oauthUrl = 'http://localhost:8080/oauth2/authorization/google'
   // private apiUrl = environment.apiUrl;
   // private oauthUrl = environment.oauthUrl;
 
@@ -26,10 +27,13 @@ export class AuthenticationService {
     const payload = { email, password };
     return this.http.post(`${this.apiUrl}login`, payload).pipe(
       tap((response: any) => {
-        const token = response.token;
-
-        // Save token in local storage
-        localStorage.setItem('jwtToken', token);
+        console.log('Response from backend:', response);  // Log the response to inspect it
+        const token = response.jwt;
+        if (token) {
+          localStorage.setItem('jwtToken', token);
+        } else {
+          console.error('Token is undefined or not found in the response');
+        }
       })
     );
   }

@@ -26,8 +26,8 @@ export class SignupComponent implements OnInit, OnDestroy {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required]],
-      // phone: ['', [Validators.required, Validators.maxLength]],
-      // address: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.maxLength]],
+      address: ['', [Validators.required]],
       password: ['', [Validators.required]],
       // retypePassword: ['', [Validators.required]]
     });

@@ -1,1 +1,26 @@
-<p>cart works!</p>
+<div class="container mt-5 text-center">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-title">
+          <h3>Your Shopping Cart</h3>
+        </div>
+        <div *ngIf="cartItems.length > 0; else noitems">
+          <div class="card-body" *ngFor="let item of cartItems">
+            <ul>
+              <li>{{ item.name }}</li>
+              <li>{{ item.quantity }}</li>
+              <li>{{ item.totalPrice }}</li>
+            </ul>
+            <button class="btn btn-danger" (click)="removeCartItem(item)">Remove</button>
+          </div>
+          <hr>
+          <p>Total amount: {{ this.totalAmount }} </p>
+          <button class="btn btn-warning" (click)="clearCart()">Clear</button>
+          &nbsp;<button class="btn btn-primary" (click)="proceedToCheckout()">Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #noitems>Cart is Empty</ng-template>
