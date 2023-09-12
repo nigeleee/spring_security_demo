@@ -38,5 +38,9 @@ public class CartItem {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public Long getProductId() {
+        return product.getProductId();
+    }
     
 }

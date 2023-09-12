@@ -39,6 +39,8 @@ public class UserServiceImp implements UserService {
         user.setEmail(userModel.getEmail());
         user.setFirstName(userModel.getFirstName());
         user.setLastName(userModel.getLastName());
+        user.setPhone(userModel.getPhone());
+        user.setAddress(userModel.getAddress());
         user.setRole("USER");
         user.setPassword(passwordEncoder.encode(userModel.getPassword()));
         // user.setPassword(userModel.getPassword());

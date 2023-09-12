@@ -19,6 +19,8 @@ public class User {
     private Long userId;
     private String firstName;
     private String lastName;
+    private String phone;
+    private String address;
     private String password;
 
     @Column(unique = true) // Enforce unique email

@@ -32,8 +32,8 @@ public class OAuth2Controller {
     public ResponseEntity<?> oauth2Redirect(HttpServletResponse httpServletResponse) {
         try {
             System.out.println(">>>>>>>>>>>>>>>>>>>>>> Inside Success handler");
-            // httpServletResponse.sendRedirect("http://localhost:4200/products");
-            httpServletResponse.sendRedirect("https://miniprojectdemo-production.up.railway.app/products");
+            httpServletResponse.sendRedirect("http://localhost:4200/products");
+            // httpServletResponse.sendRedirect("https://miniprojectdemo-production.up.railway.app/products");
             // System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> Redirecting to: " + redirectUrl);
             // httpServletResponse.sendRedirect(redirectUrl);
             

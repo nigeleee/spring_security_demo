@@ -12,8 +12,14 @@ public class CartItemSummary {
     private String name;
     private double totalPrice;
     private int quantity;
+    private Long cartId;
     private Long userId;
     private Long orderId;
+    private Long productId;
+
+    public void setProducId(Long productId) {
+        this.productId = productId;
+    }
 
     public void setProductName(String name) {
         this.name = name;

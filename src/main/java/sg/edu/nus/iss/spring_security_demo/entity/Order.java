@@ -19,29 +19,34 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private List<CartItem> cartItems;
-    private String customerName;
-    private String customerEmail;
-    private String customerPhone;
-    private String customerAddress;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phone;
+    private String address;
 
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void setCustomerPhone(String customerPhone) {
-        this.customerPhone = customerPhone;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setCustomerAddress(String customerAddress) {
-        this.customerAddress = customerAddress;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getOrderId() {
@@ -49,7 +54,7 @@ public class Order {
     }
 
     public Object getEmail() {
-        return customerEmail;
+        return email;
     }
 
 }

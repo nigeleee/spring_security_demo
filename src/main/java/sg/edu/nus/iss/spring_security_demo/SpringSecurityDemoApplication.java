@@ -13,18 +13,18 @@ public class SpringSecurityDemoApplication {
 		SpringApplication.run(SpringSecurityDemoApplication.class, args);
 	}
 
-	// @Bean
-	// public WebMvcConfigurer corsConfigurer() {
-	// 	return new WebMvcConfigurer() {
-	// 		@Override
-	// 		public void addCorsMappings(CorsRegistry registry) {
-	// 			// registry.addMapping("/**").allowedOrigins("*");
-	// 			registry.addMapping("/**")
-    //                     .allowedOrigins("https://miniprojectdemo-delta.vercel.app/")
-    //                     .allowedMethods("GET", "POST", "PUT", "DELETE");
-				
-	// 		}
-	// 	};
-	// }
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**")
+				.allowedOrigins("http://localhost:4200") // replace with your frontend server
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowCredentials(true);
+				;
+			}
+		};
+	}
 }
 

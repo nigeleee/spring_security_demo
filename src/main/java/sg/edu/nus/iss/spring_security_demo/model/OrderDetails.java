@@ -8,8 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetails {
-    private String customerName;
-    private String customerEmail;
-    private String customerPhone;
-    private String customerAddress;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phone;
+    private String address;
+
+    public CheckoutDetails getOrderDetails() {
+        return this.getOrderDetails() ;
+    }
 }
