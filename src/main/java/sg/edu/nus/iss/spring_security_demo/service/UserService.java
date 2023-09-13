@@ -2,6 +2,7 @@ package sg.edu.nus.iss.spring_security_demo.service;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.spring_security_demo.entity.User;
 import sg.edu.nus.iss.spring_security_demo.model.UserModel;
 
@@ -14,7 +15,7 @@ public interface UserService {
 
     String validateVerificaionToken(String token);
 
-    User getCurrentUser();
+    User getCurrentUser(HttpSession session);
 
     User getUserByEmail(String email);
 

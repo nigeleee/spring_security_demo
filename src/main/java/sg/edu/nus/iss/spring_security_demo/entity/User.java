@@ -27,6 +27,9 @@ public class User {
     private String email;
     private String role;
     private boolean enabled = false;
+    
+    // @Column(name = "is_profile_complete")
+    // private boolean isProfileComplete = false;
         
 }
 

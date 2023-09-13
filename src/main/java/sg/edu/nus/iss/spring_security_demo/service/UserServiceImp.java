@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import sg.edu.nus.iss.spring_security_demo.entity.User;
 import sg.edu.nus.iss.spring_security_demo.entity.VerificationToken;
 import sg.edu.nus.iss.spring_security_demo.model.UserModel;
@@ -78,20 +79,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User getCurrentUser() {
-        // System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>> in getCurrentUser()");
-        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
-        //     System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Authentication: " + authentication.isAuthenticated());
+    public User getCurrentUser(HttpSession session) {
 
-        //     String username = authentication.getName();
-        //     System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Authenticated user: " + username);
-
-        //     return userRepo.findByEmail(username);
-        // }
-        // return null; // No authenticated user
-        
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>> in getCurrentUser()");
+
+        User user = (User) session.getAttribute("OAUTH2_USER");
+    
+        if (user != null) {
+            return user;
+        }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()
@@ -100,6 +96,8 @@ public class UserServiceImp implements UserService {
             System.out.println(">>>>>>>>>>>>>>>>>> Authentication object: " + authentication);
             Object principal = authentication.getPrincipal();
             if (principal instanceof UserDetails) {
+                System.out.println("Class of principal: " + principal.getClass().getName());
+
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>> Principal is an instance of UserDetails.");
 
                 UserDetails userDetails = (UserDetails) principal;
@@ -128,6 +126,10 @@ public class UserServiceImp implements UserService {
         String storedHash = user.getPassword(); // Get the stored hash from the database
         return passwordEncoder.matches(password, storedHash);
 
+    }
+
+    public User findOrCreateUser(String email, String name) {
+        return null;
     }
 
 }

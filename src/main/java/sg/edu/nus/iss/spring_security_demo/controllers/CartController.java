@@ -76,7 +76,7 @@ public class CartController {
         System.out.println(
                 ">>>>>>>>>>>>>>>>>>>> Inside addProductToCart: productId = " + productId + ", quantity = " + quantity);
 
-        User user = userService.getCurrentUser();
+        User user = userService.getCurrentUser(session);
         System.out.println(">>>>>>>>>>>>>>>>>>>>. User:" + user);
 
         if (user != null) {
@@ -146,7 +146,7 @@ public class CartController {
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>> Inside getAllCartItems");
 
-        User user = userService.getCurrentUser();
+        User user = userService.getCurrentUser(session);
         System.out.println(">>>>>>>>>>>>>>>>>>>> current User: " + user);
 
         if (user != null) {
@@ -228,29 +228,39 @@ public class CartController {
     // session.removeAttribute("cartItems");
     // return ResponseEntity.ok("{\"message\":\"Cart Cleared\"}");
     // }
-    @PostMapping("/cart/clear-guest")
+    @DeleteMapping("/cart/clear-guest")
     public ResponseEntity<String> clearCart(HttpSession session) {
         session.removeAttribute("cartItems");
         return ResponseEntity.ok("{\"message\":\"Guest cart cleared\"}");
     }
 
-    @PostMapping("/cart/clear-user")
-    public ResponseEntity<String> clearUserCart() {
-        User user = userService.getCurrentUser();
+    // @PostMapping("/cart/clear-user")
+    // public ResponseEntity<String> clearUserCart(HttpSession session) {
+    //     User user = userService.getCurrentUser(session);
 
-        cartItemService.clearUserCart(user.getUserId());
+    //     cartItemService.clearUserCart(user.getUserId());
 
-        return ResponseEntity.ok("{\"message\":\"User cart cleared\"}");
+    //     return ResponseEntity.ok("{\"message\":\"User cart cleared\"}");
+    // }
+
+    @DeleteMapping("/cart/clear-user")
+    public ResponseEntity<String> clearUserCart(HttpSession session) {
+    User user = userService.getCurrentUser(session);  // Make sure to inject HttpSession if needed
+
+    cartItemService.clearUserCart(user.getUserId());
+
+    return ResponseEntity.ok("{\"message\":\"User cart cleared\"}");
     }
 
+
     @PostMapping("/checkout/user")
-    public ResponseEntity<String> userCheckout(@RequestBody List<CheckoutDetails> checkoutItems) {
+    public ResponseEntity<String> userCheckout(@RequestBody List<CheckoutDetails> checkoutItems, HttpSession session) {
 
         try {
             // Long productId = request.getProductId();
             // int quantity = request.getQuantity();
 
-            User user = userService.getCurrentUser();
+            User user = userService.getCurrentUser(session);
 
             // System.out.println(">>>>>>>>>>>>>>>>>>>> Product id, Quantity, User details "
             // + productId + quantity + user);
