@@ -14,6 +14,7 @@ export class AuthenticationService {
 
   private apiUrl = 'http://localhost:8080/api/';
   private oauthUrl = 'http://localhost:8080/oauth2/authorization/google'
+  private profileUrl = 'http://localhost:8080/api/profile-status'
   // private apiUrl = environment.apiUrl;
   // private oauthUrl = environment.oauthUrl;
 
@@ -48,7 +49,9 @@ export class AuthenticationService {
 
   OAuth2Login() {
 
+    // const oauth2token = response.oauth2;
     localStorage.setItem('loginMethod', 'oauth2');
+    // localStorage.setItem('oauthToken', oauth2Token);
     window.location.href = this.oauthUrl;
 
     // window.location.href = 'http://localhost:8080/oauth2/authorization/google';
@@ -66,7 +69,7 @@ export class AuthenticationService {
 
       return this.http.post(`${this.apiUrl}logout/oauth2`, {}).pipe(
         tap(() => {
-          // localStorage.removeItem('oauthToken');
+          localStorage.removeItem('oauthToken');
           localStorage.removeItem('loginMethod');
         })
       );
@@ -74,5 +77,10 @@ export class AuthenticationService {
       return of(null); // Return an observable of null if no condition is met
     }
   }
+
+  // checkProfileComplete() {
+  //   return this.http.get(this.profileUrl);
+  // }
+
 }
 

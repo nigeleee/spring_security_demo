@@ -9,6 +9,8 @@ import { AboutComponent } from './component/about.component';
 import { CartComponent } from './component/cart.component';
 import { CheckoutComponent } from './component/checkout.component';
 import { GuestCheckoutComponent } from './component/guest-checkout.component';
+// import { VerifydetailsComponent } from './component/verifydetails.component';
+// import { CompleteProfileComponent } from './component/complete-profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // redirect to `home` route
@@ -21,6 +23,8 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent},
   { path: 'about', component: AboutComponent},
   { path: 'guest-checkout', component: GuestCheckoutComponent},
+  // { path: 'verify-details', component: VerifydetailsComponent},
+  // { path: 'complete-profile', component: CompleteProfileComponent},
 
 
 

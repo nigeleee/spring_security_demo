@@ -63,7 +63,7 @@ export class CartService {
   }
 
   clearGuestCart(): Observable<any> {
-    return this.http.post(`${this.apiCartUrl}/clear-guest`, {}, { withCredentials: true });
+    return this.http.delete(`${this.apiCartUrl}/clear-guest`, { withCredentials: true });
   }
 
   clearUserCart(): Observable<any> {
@@ -71,7 +71,7 @@ export class CartService {
     const headers = new HttpHeaders()
       .set('Authorization', `Bearer ${token}`);
 
-    return this.http.post(`${this.apiCartUrl}/clear-user`, {}, { headers: headers });
+    return this.http.delete(`${this.apiCartUrl}/clear-user`, { headers: headers, withCredentials: true });
   }
 
 
@@ -107,7 +107,7 @@ export class CartService {
 
   }
 
-  
+
 
 
 }

@@ -50,15 +50,15 @@ export class GuestCheckoutComponent implements OnInit {
             // });
             this.zone.run(() => {
               this.guestCheckout();
-              this.cartService.clearGuestCart().subscribe({
-                next: (response) => {
-                  console.log('Guest cart cleared');
-                  this.getCartItems();
-                },
-                error: (err) => {
-                  console.log(err);
-                }
-              });
+              // this.cartService.clearGuestCart().subscribe({
+              //   next: (response) => {
+              //     console.log('Guest cart cleared');
+              //     this.getCartItems();
+              //   },
+              //   error: (err) => {
+              //     console.log(err);
+              //   }
+              // });
             });
           });
         }

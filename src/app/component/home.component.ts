@@ -5,13 +5,6 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
-  ngOnInit(): void {
-    if(localStorage.getItem('jwt') != null || localStorage.getItem('oauth2') != null) {
-      console.log('User is logged in with : ' + localStorage.getItem('loginMethod'))
-    } else {
-      console.log('Guest mode')
-    }
-  }
 }

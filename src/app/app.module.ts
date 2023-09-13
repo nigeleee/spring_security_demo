@@ -16,6 +16,8 @@ import { CheckoutComponent } from './component/checkout.component';
 import { GuestCheckoutComponent } from './component/guest-checkout.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialsModule } from './materials/materials.module';
+// import { VerifydetailsComponent } from './component/verifydetails.component';
+// import { CompleteProfileComponent } from './component/complete-profile.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { MaterialsModule } from './materials/materials.module';
     CartComponent,
     CheckoutComponent,
     GuestCheckoutComponent,
+    // VerifydetailsComponent,
+    // CompleteProfileComponent,
   ],
 
   imports: [

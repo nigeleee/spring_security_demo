@@ -45,15 +45,15 @@ export class CheckoutComponent implements OnInit {
           // });
           this.zone.run(() => {
             this.checkout();
-            this.cartService.clearUserCart().subscribe({
-              next: (response) => {
-                console.log('User cart cleared');
-                this.getCartItems();
-              },
-              error: (err) => {
-                console.log(err);
-              }
-            });
+            // this.cartService.clearUserCart().subscribe({
+            //   next: (response) => {
+            //     console.log('User cart cleared');
+            //     this.getCartItems();
+            //   },
+            //   error: (err) => {
+            //     console.log(err);
+            //   }
+            // });
           });
         });
       }
